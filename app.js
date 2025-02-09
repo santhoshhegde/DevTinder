@@ -39,6 +39,26 @@ app.get("/feed", async (req, res) => {
   }
 });
 
+app.patch("/update", async (req, res) => {
+  try {
+    const userId = req.body.userId;
+    const data = req.body;
+    await User.findByIdAndUpdate({ _id: userId }, data);
+    res.send("Sucessfull");
+  } catch (err) {
+    res.status(400).send("Error Saving the user " + err.message);
+  }
+});
+
+app.delete("/user", async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.body.userId);
+    res.send("Deleted");
+  } catch (err) {
+    res.status(400).send("Error Saving the user " + err.message);
+  }
+});
+
 ConnectDB()
   .then(() => {
     console.log("DB Connected");

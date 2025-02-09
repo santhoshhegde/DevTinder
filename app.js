@@ -5,18 +5,35 @@ const User = require("./models/user");
 const app = express();
 const Port = 8888;
 
-app.post("/signUp", (req, res) => {
-  const user = new User({
-    firstName: "Sita",
-    lastName: "Ram",
-    age: 10000000000,
-    email: "ram@ram.in",
-    password: "Ram",
-    gender: "F",
-  });
+app.use(express.json());
+
+app.post("/signUp", async (req, res) => {
+  const user = new User(req.body);
   try {
-    user.save();
+    await user.save();
     res.send("Saved");
+  } catch (err) {
+    res.status(400).send("Error Saving the user " + err.message);
+  }
+});
+
+app.get("/user", async (req, res) => {
+  try {
+    const user = await User.find({ email: req.body.email });
+    res.send(user);
+  } catch (err) {
+    res.status(400).send("Error Saving the user " + err.message);
+  }
+});
+
+app.get("/feed", async (req, res) => {
+  try {
+    const allUser = await User.find();
+    if (allUser.length == 0) {
+      res.status(404).send("No user found");
+    } else {
+      res.send(allUser);
+    }
   } catch (err) {
     res.status(400).send("Error Saving the user " + err.message);
   }

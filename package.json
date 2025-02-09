@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "express": "^4.21.2",
+    "mongoose": "^8.10.0",
+    "nodemon": "^3.1.9"
+  },
+  "name": "new-folder",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "author": "Baackend Dev",
+  "license": "ISC",
+  "description": ""
+}

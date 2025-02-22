@@ -1,24 +1,20 @@
-const adminAuth = (req, res, next) => {
-  const token = "xyz";
-  if (token == "xyz") {
-    console.log("Sent all the Data");
-    next();
-  } else {
-    res.status(401).send("Unautharoised");
-  }
-};
+const jwt = require("jsonwebtoken");
+const User = require("../models/user");
 
-const userAuth = (req, res, next) => {
-  console.log("Auth....");
-  const token = "user";
-  if (token == "user") {
+const userAuth = async (req, res, next) => {
+  try {
+    const { token } = req.cookies;
+    if (!token) {
+      throw new Error("Invalid token");
+    }
+    const decodedObj = jwt.verify(token, "DevTinder@22/2/2025");
+    req.user = await User.findById(decodedObj._id);
     next();
-  } else {
-    res.status(401).send("Unauthorised");
+  } catch (err) {
+    res.status(400).send("Error in middleware " + err.message);
   }
 };
 
 module.exports = {
-  adminAuth,
   userAuth,
 };

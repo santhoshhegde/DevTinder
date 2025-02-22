@@ -1,4 +1,6 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 const ConnectDB = require("./config/db");
 const User = require("./models/user");
 const {
@@ -10,6 +12,7 @@ const app = express();
 const Port = 8888;
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.post("/signUp", async (req, res) => {
   try {
@@ -51,10 +54,33 @@ app.post("/signIn", async (req, res) => {
     if (!exsistPassword) {
       res.status(401).send("Invalid credentials password");
     } else {
-      res.send(exsistingUser);
+      const jwtSecret = jwt.sign(
+        { _id: exsistingUser._id },
+        "DevTinder@22/2/2025"
+      );
+      res.cookie("asdf", "alsjdfkasjdf");
+      res.cookie("token", jwtSecret);
+      res.send("Login Successful");
     }
   } catch (err) {
     res.status(400).send("Error " + err.message);
+  }
+});
+
+app.get("/profile", async (req, res) => {
+  try {
+    const { token } = req.cookies;
+    if (!token) {
+      throw new Error("Invalid Token");
+    }
+    const userId = jwt.verify(token, "DevTinder@22/2/2025");
+    const user = await User.findById(userId._id);
+    if (!user) {
+      throw new Error("User not found");
+    }
+    res.send(user);
+  } catch (err) {
+    res.status(400).send("ERROR: " + err.message);
   }
 });
 

@@ -58,7 +58,6 @@ app.post("/signIn", async (req, res) => {
         { _id: exsistingUser._id },
         "DevTinder@22/2/2025"
       );
-      res.cookie("asdf", "alsjdfkasjdf");
       res.cookie("token", jwtSecret);
       res.send("Login Successful");
     }

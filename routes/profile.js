@@ -12,19 +12,6 @@ profileRouter.get("/profile", userAuth, async (req, res) => {
   }
 });
 
-profileRouter.get("/feed", async (req, res) => {
-  try {
-    const allUser = await User.find();
-    if (allUser.length == 0) {
-      res.status(404).send("No user found");
-    } else {
-      res.send(allUser);
-    }
-  } catch (err) {
-    res.status(400).send("Error Saving the user " + err.message);
-  }
-});
-
 profileRouter.patch("/profile/edit/", userAuth, async (req, res) => {
   try {
     if (!validateEditProfileData(req.body)) {

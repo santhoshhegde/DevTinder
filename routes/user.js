@@ -3,6 +3,7 @@ const userRouter = express.Router();
 const { userAuth } = require("../middlewares/auth");
 const ConnectionRequestModel = require("../models/connection");
 const User = require("../models/user");
+const { USER_SAFE_DATA } = require("../utils/constants");
 
 userRouter.get("/user/request/received", userAuth, async (req, res) => {
   try {
@@ -22,7 +23,6 @@ userRouter.get("/user/request/received", userAuth, async (req, res) => {
 
 userRouter.get("/user/connections", userAuth, async (req, res) => {
   try {
-    const USER_SAFE_DATA = "firstName lastName gender age about skills";
     const loggedInUser = req.user;
     const connections = await ConnectionRequestModel.find({
       $or: [
@@ -50,10 +50,9 @@ userRouter.get("/feed", userAuth, async (req, res) => {
     const loggedInUser = req.user;
     const connectionRequest = await ConnectionRequestModel.find({
       $or: [{ fromUserId: loggedInUser._id }, { toUserId: loggedInUser._id }],
-    });
+    }).select("fromUserId toUserId");
     // .populate("fromUserId", "firstName")
     // .populate("toUserId", "firstName");
-
     const userExclude = new Set();
     connectionRequest.forEach((user) => {
       if (user.fromUserId.equals(loggedInUser._id)) {
@@ -62,13 +61,12 @@ userRouter.get("/feed", userAuth, async (req, res) => {
         userExclude.add(user.fromUserId);
       }
     });
-
     const feedUser = await User.find({
-      $or: [
-        { fromUserId: { $nin: Array.from(userExclude) } },
-        { toUserId: { $nin: Array.from(userExclude) } },
+      $and: [
+        { _id: { $nin: Array.from(userExclude) } },
+        { _id: { $ne: loggedInUser._id } },
       ],
-    });
+    }).select(USER_SAFE_DATA);
     res.json({ message: "User list", data: feedUser });
   } catch (err) {
     res.status(400).json("Error: " + err.message);

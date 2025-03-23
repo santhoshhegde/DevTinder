@@ -48,6 +48,11 @@ const userSchema = new mongoose.Schema(
     },
     about: { type: String, default: "I am SDE" },
     skills: { type: [String] },
+    photoUrl: {
+      type: String,
+      default:
+        "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg",
+    },
   },
   { timestamps: true }
 );

@@ -43,7 +43,7 @@ authRouter.post("/signIn", async (req, res) => {
     const exsistPassword = await exsistingUser.verifyPassword(password);
 
     if (!exsistPassword) {
-      res.status(401).send("Invalid credentials");
+      return res.status(401).send("Invalid credentials");
     } else {
       const jwtToken = await exsistingUser.getJWT();
 

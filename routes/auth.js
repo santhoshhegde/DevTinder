@@ -38,12 +38,12 @@ authRouter.post("/signIn", async (req, res) => {
     const exsistingUser = await User.findOne({ email });
     // console.log(exsistingUser);
     if (!exsistingUser) {
-      throw new Error("Invalid credentials email");
+      return res.status(401).send("Invalid credentials");
     }
     const exsistPassword = await exsistingUser.verifyPassword(password);
 
     if (!exsistPassword) {
-      res.status(401).send("Invalid credentials password");
+      res.status(401).send("Invalid credentials");
     } else {
       const jwtToken = await exsistingUser.getJWT();
 

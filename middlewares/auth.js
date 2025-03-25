@@ -6,7 +6,7 @@ const userAuth = async (req, res, next) => {
     console.log(req);
     const { token } = req.cookies;
     if (!token) {
-      throw new Error("Invalid token");
+      return res.status(401).send("Invalid token");
     }
     const decodedObj = jwt.verify(token, "DevTinder@22/2/2025");
     req.user = await User.findById(decodedObj._id);

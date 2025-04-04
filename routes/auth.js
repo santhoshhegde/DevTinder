@@ -24,8 +24,12 @@ authRouter.post("/signUp", async (req, res) => {
       skills,
     });
 
+    const jwtToken = await user.getJWT();
+    res.cookie("token", jwtToken, {
+      expires: new Date(Date.now() + 8 * 3600000),
+    });
     await user.save();
-    res.send("Saved");
+    res.json({ message: "Saved", data: user });
   } catch (err) {
     res.status(400).send("Error Saving the user " + err.message);
   }

@@ -2,7 +2,7 @@
 
 **DevTinder** is a social media platform for developers to connect with each other, inspired by Tinder's swipe feature! This backend is built using **Node.js**, **Express.js**, and **MongoDB**, providing secure authentication, user profile management, and a dynamic feed. Users can interact, send connection requests, and manage their profiles.
 
-![DevTinder Backend](https://img.shields.io/badge/Node.js-18.12.1-green) ![MongoDB](https://img.shields.io/badge/MongoDB-4.2-blue) ![Express](https://img.shields.io/badge/Express-4.17.1-orange)
+![DevTinder Backend](https://img.shields.io/badge/Node.js-latest-green) ![Express.js](https://img.shields.io/badge/Express.js-4.21.2-orange) ![MongoDB](https://img.shields.io/badge/MongoDB-5.x-blue)
 
 ## 🚀 Features
 
